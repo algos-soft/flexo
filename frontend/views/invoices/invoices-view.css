@@ -1,0 +1,122 @@
+.indexes-view {
+  display: block;
+  height: 100%;
+}
+
+.indexes-view vaadin-grid {
+  height: 100%;
+  line-height: var(--lumo-line-height-m);
+}
+
+.indexes-view vaadin-grid,
+.indexes-view vaadin-grid-cell-content {
+  background-color: var(--lumo-contrast-10pct);
+}
+
+.indexes-view .card {
+  background-color: var(--lumo-base-color);
+  border-radius: var(--lumo-border-radius);
+  box-shadow: var(--lumo-box-shadow-xs);
+  padding: calc(var(--lumo-space-s) * 1.5) var(--lumo-space-m);
+  align-items: center;
+}
+
+.indexes-view img {
+  border-radius: 10%;
+  flex-shrink: 0;
+  height: var(--lumo-size-xl);
+  width: var(--lumo-size-xl);
+  margin-right: calc(var(--lumo-space-s) * 1.5);
+}
+
+.indexes-view .header {
+  align-items: baseline;
+}
+
+.indexes-view .symbol {
+  font-size: var(--lumo-font-size-m);
+  font-weight: bold;
+  margin-right: var(--lumo-space-m);
+}
+
+.indexes-view .name {
+  font-size: var(--lumo-font-size-s);
+  margin-right: var(--lumo-space-s);
+  margin-top: 0px;
+  white-space:normal;
+}
+
+.indexes-view .category {
+  font-size: calc(var(--lumo-font-size-xxs)*0.9);
+  margin-top: 0px;
+}
+
+.indexes-view .date {
+  color: var(--lumo-tertiary-text-color);
+  font-size: var(--lumo-font-size-xs);
+}
+
+.indexes-view .post {
+  color: var(--lumo-secondary-text-color);
+  font-size: var(--lumo-font-size-s);
+  margin-bottom: var(--lumo-space-s);
+  white-space: normal;
+}
+
+.indexes-view .actions {
+  align-items: center;
+}
+
+
+.indexes-view-icon {
+  color: var(--lumo-tertiary-text-color);
+  height: calc(var(--lumo-icon-size-s) * 0.8);
+  margin-right: 0em;
+  width: calc(var(--lumo-icon-size-s) * 0.8);
+}
+
+.indexes-view .details {
+  margin-top: var(--lumo-space-xs);
+  align-items: center;
+}
+
+
+.indexes-view .interval,
+.indexes-view .points,
+.indexes-view .frequency,
+.indexes-view .detail-row
+ {
+  color: var(--lumo-tertiary-text-color);
+  font-size: var(--lumo-font-size-xs);
+  margin-left: 5px;
+  margin-right: var(--lumo-space-l);
+  white-space: normal;
+}
+
+
+
+.indexes-view .panel {
+  border-right: 2px solid #ccc;
+}
+
+.indexesview-pan1{
+    min-width:5.5em;
+    max-width:5.5em;
+}
+
+.indexesview-pan2{
+    min-width:12em;
+    max-width:12em;
+}
+
+.indexesview-pan3{
+    min-width:18em;
+    max-width:18em;
+}
+
+.indexesview-pan4{
+    min-width:18em;
+    max-width:18em;
+}
+
+
