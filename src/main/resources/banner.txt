@@ -7,3 +7,11 @@
 |   Vaadin | SpringBoot Web application                   |
 |   (C)2021 Alessandro Valbonesi                          |
 +---------------------------------------------------------+
+${AnsiColor.RED}
+${AnsiColor.GREEN}FLEXO${AnsiColor.RED}
+Java ver: ${AnsiColor.GREEN}${java.version}${AnsiColor.RED}
+SpringBoot ver: ${AnsiColor.GREEN}${spring-boot.formatted-version}${AnsiColor.RED}
+Vaadin ver: ${AnsiColor.GREEN}${vaadin.version}${AnsiColor.RED}
+Flexo ver: ${AnsiColor.GREEN}${algos.flexo.version}${AnsiColor.RED} di ${AnsiColor.GREEN}${algos.flexo.version.date}${AnsiColor.RED}
+Tomcat port: ${AnsiColor.GREEN}${server.port}${AnsiColor.RED}
+${AnsiColor.DEFAULT}
