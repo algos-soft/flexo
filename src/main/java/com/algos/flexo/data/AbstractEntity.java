@@ -1,4 +1,4 @@
-package com.algos.flexo.data.entity;
+package com.algos.flexo.data;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

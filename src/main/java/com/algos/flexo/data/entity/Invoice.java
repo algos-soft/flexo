@@ -1,13 +1,12 @@
 package com.algos.flexo.data.entity;
 
 import com.algos.flexo.beans.Utils;
+import com.algos.flexo.data.*;
 import com.algos.flexo.utils.Du;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Invoice extends AbstractEntity {
