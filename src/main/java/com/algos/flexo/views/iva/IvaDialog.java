@@ -2,6 +2,7 @@ package com.algos.flexo.views.iva;
 
 import com.algos.flexo.data.entity.*;
 import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.dialog.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
@@ -47,6 +48,7 @@ public class IvaDialog extends Dialog {
         setCloseOnEsc(true);
         setCloseOnOutsideClick(true);
         add(buildContent());
+
     }
 
     private Component buildContent() {
@@ -120,18 +122,12 @@ public class IvaDialog extends Dialog {
         Div btnLayout = new Div();
         btnLayout.addClassName("footer");
 
-        //        Button confirmButton = new Button("Confirm", event -> {
-        //            UserModel model = modelFromDialog();
-        //            confirmListener.onConfirm(model);
-        //            close();
-        //        });
-        //        confirmButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        //
-        //        Button cancelButton = new Button("Cancel", event -> {
-        //            close();
-        //        });
-        //
-        //        btnLayout.add(cancelButton, confirmButton);
+        Button confirmButton = new Button("Confirm", event -> { close(); });
+        confirmButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        Button cancelButton = new Button("Cancel", event -> { close(); });
+
+        btnLayout.add(cancelButton, confirmButton);
 
         return btnLayout;
     }
