@@ -143,9 +143,14 @@ public class IvaDialog extends Dialog {
     }
 
     private void confirm() {
-        // controllo validità nel binder/gui
+        // trasferisce i valori dalla UI al binder
+
+        // controllo validità nel binder
+
+        // trasferisce i valori dal binder alla entityBean
 
         // registrazione nel service che si connette al database
+        // con eventuali beforeSave() e afterSave()
         ivaService.save(entityBean);
 
         // chiude il dialogo

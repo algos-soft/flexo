@@ -8,7 +8,6 @@ import com.algos.flexo.views.*;
 import com.algos.flexo.views.main.*;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.*;
-import com.vaadin.flow.component.dialog.*;
 import com.vaadin.flow.component.grid.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.*;
@@ -36,14 +35,6 @@ public class IvaView extends Div {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private Grid<Iva> grid;
-
-    @Autowired
-    private ApplicationContext context;
-
-    @Autowired
-    private Utils utils;
-
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
      * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
@@ -51,6 +42,14 @@ public class IvaView extends Div {
      */
     @Autowired
     public IvaService ivaService;
+
+    private Grid<Iva> grid;
+
+    @Autowired
+    private ApplicationContext context;
+
+    @Autowired
+    private Utils utils;
 
     @PostConstruct
     private void init() {
@@ -86,7 +85,7 @@ public class IvaView extends Div {
         //        grid.addColumn("enDescription");
         //        grid.addColumn("type");
 
-        //        ivaService.saveListaConfig();
+        ivaService.saveListaConfig();
         List<Iva> items = ivaService.findAll();
 
         grid.setItems(items);

@@ -11,7 +11,7 @@
 
     <properties>
         <java.version>8</java.version>
-        <vaadin.version>14.6.5</vaadin.version>
+        <vaadin.version>14.6.6</vaadin.version>
     </properties>
 
     <parent>
@@ -242,6 +242,12 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/net.sf.jopt-simple/jopt-simple -->
+<!--        <dependency>-->
+<!--            <groupId>net.sf.jopt-simple</groupId>-->
+<!--            <artifactId>jopt-simple</artifactId>-->
+<!--            <version>4.6</version>-->
+<!--        </dependency>-->
 
     </dependencies>
 
