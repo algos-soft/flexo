@@ -6,6 +6,7 @@ import com.vaadin.flow.spring.annotation.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
+import org.vaadin.artur.helpers.*;
 
 import java.util.*;
 
@@ -20,6 +21,7 @@ import java.util.*;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class IvaService {
 
+    private IvaRepository repository;
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -29,6 +31,9 @@ public class IvaService {
     @Autowired
     public ResourceService resourceService;
 
+    public IvaService(@Autowired IvaRepository repository) {
+        this.repository = repository;
+    }
 
     /**
      * Legge una lista di entities dalle risorse esterne in 'config' <br>
@@ -51,6 +56,20 @@ public class IvaService {
         }
 
         return items;
+    }
+
+    /**
+     * Registra una lista di entities letta dalle risorse esterne in 'config' <br>
+     * Provvisorio per testare la Grid <br>
+     */
+    public void saveListaConfig() {
+        List<Iva> items =getListConfig();
+
+        if (items != null && items.size() > 0) {
+            for (Iva iva: items) {
+                repository.save(iva);
+            }
+        }
     }
 
     /**
@@ -96,6 +115,14 @@ public class IvaService {
         }
 
         return iva;
+    }
+
+    public void save(Iva entityBean) {
+        repository.save(entityBean);
+    }
+
+    public List findAll() {
+        return repository.findAll();
     }
 
 }

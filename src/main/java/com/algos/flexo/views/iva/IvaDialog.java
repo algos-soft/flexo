@@ -1,6 +1,7 @@
 package com.algos.flexo.views.iva;
 
 import com.algos.flexo.data.entity.*;
+import com.algos.flexo.data.service.*;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.dialog.*;
@@ -8,6 +9,7 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.spring.annotation.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
@@ -23,6 +25,14 @@ import javax.annotation.*;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class IvaDialog extends Dialog {
+
+    /**
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
+     */
+    @Autowired
+    public IvaService ivaService;
 
     private Iva entityBean;
 
@@ -122,7 +132,7 @@ public class IvaDialog extends Dialog {
         Div btnLayout = new Div();
         btnLayout.addClassName("footer");
 
-        Button confirmButton = new Button("Confirm", event -> { close(); });
+        Button confirmButton = new Button("Confirm", event -> { confirm(); });
         confirmButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         Button cancelButton = new Button("Cancel", event -> { close(); });
@@ -130,6 +140,16 @@ public class IvaDialog extends Dialog {
         btnLayout.add(cancelButton, confirmButton);
 
         return btnLayout;
+    }
+
+    private void confirm() {
+        // controllo validità nel binder/gui
+
+        // registrazione nel service che si connette al database
+        ivaService.save(entityBean);
+
+        // chiude il dialogo
+        close();
     }
 
 }

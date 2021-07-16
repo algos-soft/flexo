@@ -86,7 +86,9 @@ public class IvaView extends Div {
         //        grid.addColumn("enDescription");
         //        grid.addColumn("type");
 
-        List<Iva> items = ivaService.getListConfig();
+        //        ivaService.saveListaConfig();
+        List<Iva> items = ivaService.findAll();
+
         grid.setItems(items);
         this.add(grid);
         grid.addItemDoubleClickListener(event -> openItem(event));
