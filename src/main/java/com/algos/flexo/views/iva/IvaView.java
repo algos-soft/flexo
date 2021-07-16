@@ -74,21 +74,29 @@ public class IvaView extends Div {
     }
 
     private void createGrid() {
-
-        grid = new Grid<>(Iva.class);
-        grid.setHeight("100%");
-        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);
-
+        // flag=true vengono create tutte le colonne in automatico
+        grid = new Grid<>(Iva.class, true);
         //        grid.addColumn("code");
         //        grid.addColumn("description");
         //        grid.addColumn("percent");
         //        grid.addColumn("enDescription");
         //        grid.addColumn("type");
 
-        ivaService.saveListaConfig();
-        List<Iva> items = ivaService.findAll();
+        grid.setHeight("100%");
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);
 
+
+        // provvisorio per ricreare la lista ogni volta @todo Da levare
+        ivaService.deleteAll();
+        ivaService.saveListaConfig(); // recupera la lista da un file csv nella directory 'config'
+        // provvisorio per ricreare la lista ogni volta @todo Da levare
+
+
+        // recupero dal service/repository per adesso senza DataProvider
+        List<Iva> items = ivaService.findAll();
         grid.setItems(items);
+
+
         this.add(grid);
         grid.addItemDoubleClickListener(event -> openItem(event));
 

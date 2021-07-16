@@ -121,6 +121,10 @@ public class IvaService {
         repository.save(entityBean);
     }
 
+    public void deleteAll() {
+        repository.deleteAll();
+    }
+
     public List findAll() {
         return repository.findAll();
     }

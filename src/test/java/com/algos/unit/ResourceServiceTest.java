@@ -125,7 +125,7 @@ public class ResourceServiceTest {
         String property;
 
         sorgente = "iva";
-        previstoIntero = 5;
+        previstoIntero = 15;
         listaMappe = service.readMapConfig(sorgente);
         assertNotNull(listaMappe);
         System.out.println(String.format("Nella directory '%s' esiste il file: %s", CONFIG, sorgente));
