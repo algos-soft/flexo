@@ -38,18 +38,6 @@ public class ResourceService {
 
 
     /**
-     * Read external resource file from {project directory}/config/ <br>
-     *
-     * @param simpleNameFileToBeRead without path and without directory
-     *
-     * @return file text
-     */
-    public String readConfig(String simpleNameFileToBeRead) {
-        return fileService.readFile(CONFIG + File.separator + simpleNameFileToBeRead);
-    }
-
-
-    /**
      * Legge una lista di righe di risorse da {project directory}/config/ <br>
      * La prima riga contiene i titoli
      *
@@ -59,16 +47,15 @@ public class ResourceService {
      */
     public List<String> readListConfig(String simpleNameFileToBeRead) {
         List<String> rows = null;
-        String rawText = this.readConfig(simpleNameFileToBeRead);
+        String rawText = fileService.readFileConfig(simpleNameFileToBeRead);
         String[] beans;
 
-        if (rawText != null && rawText.length() > 0){
+        if (rawText != null && rawText.length() > 0) {
             rows = new ArrayList<>();
             beans = rawText.split(A_CAPO);
             if (beans != null && beans.length > 0) {
                 for (String row : beans) {
-                    row = extract(row);
-                    if (row != null && row.length() > 0){
+                    if (row != null && row.length() > 0) {
                         rows.add(row);
                     }
                 }
@@ -76,20 +63,6 @@ public class ResourceService {
         }
 
         return rows;
-    }
-
-
-    public String extract(final String valueIn) {
-        String text;
-        int posIni;
-        int posEnd;
-
-        posEnd = valueIn.lastIndexOf(DOPPIE_GRAFFE_END);
-        posIni = valueIn.lastIndexOf(DOPPIE_GRAFFE_INI, posEnd);
-        posIni += DOPPIE_GRAFFE_INI.length();
-        text = valueIn.substring(posIni, posEnd).trim();
-
-        return text;
     }
 
 }

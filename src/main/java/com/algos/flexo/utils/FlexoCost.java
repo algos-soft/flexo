@@ -27,4 +27,6 @@ public abstract class FlexoCost {
 
     public static final String DOPPIE_GRAFFE_END = "}}";
 
+    public static final String SLASH = "/";
+
 }

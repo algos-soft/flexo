@@ -1,5 +1,6 @@
 package com.algos.flexo.service;
 
+import static com.algos.flexo.service.ResourceService.*;
 import com.algos.flexo.utils.*;
 import static com.algos.flexo.utils.FlexoCost.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -24,7 +25,7 @@ public class FileService {
     /**
      * Read external file <br>
      *
-     * @param pathFileToBeRead nome completo del file
+     * @param pathFileToBeRead complete path name of file
      */
     public String readFile(String pathFileToBeRead) {
         String text = VUOTA;
@@ -41,9 +42,21 @@ public class FileService {
             }
         } catch (Exception unErrore) {
 //            logger.error(unErrore, this.getClass(), "leggeFile");
+            int a=87;
         }
 
         return text;
     }
 
+    /**
+     * Read external file from 'config' directory <br>
+     *
+     * @param simpleFileName to be read
+     */
+    public String readFileConfig(String simpleFileName) {
+        String dirProject = System.getProperty("user.dir") + SLASH;
+        String dirConfig = dirProject + CONFIG + SLASH;
+
+        return readFile(dirConfig+simpleFileName);
+    }
 }
