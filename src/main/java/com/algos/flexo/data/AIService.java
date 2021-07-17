@@ -13,15 +13,17 @@ import java.util.*;
  */
 public interface AIService {
 
-     void save(AbstractEntity entityBean);
+    void save(AbstractEntity entityBean);
 
-     void deleteAll();
+    void delete(AbstractEntity entityBean);
 
-     List findAll();
+    void deleteAll();
 
-     List<AbstractEntity> fetch(Class<? extends AbstractEntity> entityClazz, Sort sortSpring, int offset, int limit);
+    List findAll();
 
-     int count(Class entityClazz);
+    List<AbstractEntity> fetch(Class<? extends AbstractEntity> entityClazz, Sort sortSpring, int offset, int limit);
+
+    int count(Class entityClazz);
 
 }// end of interface
 

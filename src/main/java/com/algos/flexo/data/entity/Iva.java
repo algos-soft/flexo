@@ -67,4 +67,5 @@ public class Iva extends AbstractEntity {
         this.type = type;
     }
 
+
 }

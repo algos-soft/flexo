@@ -4,7 +4,6 @@ import com.algos.flexo.data.*;
 import com.algos.flexo.data.entity.*;
 import com.algos.flexo.service.*;
 import com.vaadin.flow.spring.annotation.*;
-import org.apache.poi.ss.formula.functions.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
@@ -120,6 +119,14 @@ public class IvaService extends DataService {
         return iva;
     }
 
+    public Iva newEntity() {
+        Iva newEntityBean = new Iva();
+
+        newEntityBean.setPercent(null);
+
+        return newEntityBean;
+    }
+
     public List<String> getTypes() {
         return resourceService.readListConfig("iva-type");
     }
@@ -135,6 +142,11 @@ public class IvaService extends DataService {
     }
 
     @Override
+    public void delete(AbstractEntity entityBean) {
+        repository.delete((Iva)entityBean);
+    }
+
+    @Override
     public List<Iva> findAll() {
         return repository.findAll();
     }
@@ -144,8 +156,7 @@ public class IvaService extends DataService {
         return repository.findAll(); // provvisorio
     }
 
-    @Override
-    public int count(Class entityClazz) {
+    public int count() {
         return ((Long) repository.count()).intValue();
     }
 

@@ -18,6 +18,10 @@ public class DataService implements AIService {
     }
 
     @Override
+    public void delete(AbstractEntity entityBean) {
+    }
+
+    @Override
     public void deleteAll() {
     }
 

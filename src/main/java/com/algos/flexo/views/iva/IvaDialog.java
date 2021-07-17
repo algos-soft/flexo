@@ -7,14 +7,18 @@ import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.component.dialog.*;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.icon.*;
+import com.vaadin.flow.component.notification.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.textfield.*;
+import com.vaadin.flow.data.binder.*;
 import com.vaadin.flow.spring.annotation.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.*;
+import java.util.stream.*;
 
 /**
  * Project flexo
@@ -37,15 +41,25 @@ public class IvaDialog extends Dialog {
 
     private Iva entityBean;
 
+    // se c'è corrispondenza semplice, entrano automaticamente nel binder
+    @PropertyId("code")
     private TextField codeField;
 
+    // se c'è corrispondenza semplice, entrano automaticamente nel binder
+    @PropertyId("description")
     private TextArea descriptionField;
 
+    // se non c'è corrispondenza occorre un converter per il binder
     private NumberField percentField;
 
+    // se c'è corrispondenza semplice, entrano automaticamente nel binder
+    @PropertyId("enDescription")
     private TextArea enDescriptionField;
 
+    // se non c'è corrispondenza occorre un converter per il binder
     private ComboBox typeField;
+
+    private Binder<Iva> binder;
 
     public IvaDialog() {
     }
@@ -56,11 +70,16 @@ public class IvaDialog extends Dialog {
 
     @PostConstruct
     private void init() {
+        // newItem -> se manca entityBean, la crea vuota (valori eventuali default)
+        this.entityBean = entityBean != null ? entityBean : ivaService.newEntity();
+
         setCloseOnEsc(true);
         setCloseOnOutsideClick(true);
         add(buildContent());
 
+        fixBinder();
     }
+
 
     private Component buildContent() {
 
@@ -90,7 +109,8 @@ public class IvaDialog extends Dialog {
     private Component buildBody() {
         VerticalLayout body = new VerticalLayout();
         body.addClassName("body");
-        String lar = "30em";
+        String lar1 = "6em";
+        String lar2 = "30em";
 
         HorizontalLayout primaRiga = new HorizontalLayout();
         HorizontalLayout secondaRiga = new HorizontalLayout();
@@ -98,33 +118,35 @@ public class IvaDialog extends Dialog {
 
         codeField = new TextField();
         codeField.setLabel("Code");
+        codeField.setWidth(lar1);
         codeField.setPlaceholder("code");
         codeField.setRequired(true);
         codeField.setErrorMessage("code must be filled in!");
 
         descriptionField = new TextArea();
         descriptionField.setLabel("Description");
-        descriptionField.setWidth(lar);
+        descriptionField.setWidth(lar2);
         descriptionField.setPlaceholder("description");
         descriptionField.setRequired(true);
         descriptionField.setErrorMessage("description must be filled in!");
 
         percentField = new NumberField();
         percentField.setLabel("Aliquota %");
+        percentField.setWidth(lar1);
+        percentField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT);
         percentField.setPlaceholder("aliquota %");
         percentField.setErrorMessage("aliquota must be filled in!");
 
         enDescriptionField = new TextArea();
         enDescriptionField.setLabel("English description");
+        enDescriptionField.setWidth(lar2);
         enDescriptionField.setPlaceholder("optional");
 
         typeField = new ComboBox();
         typeField.setItems(ivaService.getTypes());
         typeField.setLabel("Type");
-        typeField.setWidth(lar);
+        typeField.setWidth(lar2);
         typeField.setPlaceholder("optional");
-
-        fromDataBaseToUI();
 
         primaRiga.add(codeField, percentField);
         secondaRiga.add(descriptionField);
@@ -143,60 +165,75 @@ public class IvaDialog extends Dialog {
 
         Button confirmButton = new Button("Confirm", event -> { confirm(); });
         confirmButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        confirmButton.setIcon(new Icon(VaadinIcon.CHECK));
+
+        Button deleteButton = new Button("Delete", event -> { delete(); });
+        deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        deleteButton.setIcon(new Icon(VaadinIcon.CLOSE_CIRCLE));
 
         Button cancelButton = new Button("Cancel", event -> { close(); });
+        cancelButton.setIcon(new Icon(VaadinIcon.ARROW_LEFT));
 
-        btnLayout.add(cancelButton, confirmButton);
+        btnLayout.add(cancelButton, deleteButton, confirmButton);
 
         return btnLayout;
     }
 
-    // trasferisce i valori dal database al binder
-    private void fromDataBaseToUI() {
-        if (entityBean.getCode() != null) {
-            if (codeField != null) {
-                codeField.setValue(entityBean.getCode());
-            }
-        }
+    protected void fixBinder() {
+        binder = new Binder<>(Iva.class);
 
-        if (entityBean.getDescription() != null) {
-            if (descriptionField != null) {
-                descriptionField.setValue(entityBean.getDescription());
-            }
-        }
+        //--Aggiunge in automatico i fields normali al binder
+        binder.bindInstanceFields(this);
 
-        if (entityBean.getPercent() != null) {
-            if (percentField != null) {
-                percentField.setValue(entityBean.getPercent().doubleValue());
-            }
-        }
+        //--Eventuali fields aggiunti extra binder con converters e validators
+        binder.forField(percentField)
+                .withConverter(doble -> Float.parseFloat(doble.toString()), flot -> flot != null ? Double.valueOf(flot.toString()) : 0.0)
+                .bind(Iva::getPercent, Iva::setPercent);
 
-        if (entityBean.getEnDescription() != null) {
-            if (enDescriptionField != null) {
-                enDescriptionField.setValue(entityBean.getEnDescription());
-            }
-        }
+        binder.forField(codeField)
+                .withValidator(text -> text.length() > 0, "Not null")
+                .bind(Iva::getCode, Iva::setCode);
 
-        if (entityBean.getType() != null) {
-            if (typeField != null) {
-                typeField.setValue(entityBean.getType());
-            }
-        }
+        binder.forField(descriptionField)
+                .withValidator(text -> text.length() > 0, "Not null")
+                .bind(Iva::getDescription, Iva::setDescription);
+
+        // Updates the value in each bound field component
+        //--Sincronizza il binder all' apertura della scheda
+        //--Trasferisce (binder read) i valori dal DB alla UI
+        binder.readBean(entityBean);
+    }
+
+
+    private void delete() {
+        ivaService.delete(entityBean);
+
+        // chiude il dialogo
+        close();
     }
 
     private void confirm() {
         // trasferisce i valori dalla UI al binder
+        try {
+            // controllo validità nel binder
+            if (binder.writeBeanIfValid(entityBean)) {
+                // registrazione nel service che si connette al database
+                // con eventuali beforeSave() e afterSave()
+                ivaService.save(entityBean);
 
-        // controllo validità nel binder
-
-        // trasferisce i valori dal binder alla entityBean
-
-        // registrazione nel service che si connette al database
-        // con eventuali beforeSave() e afterSave()
-        ivaService.save(entityBean);
-
-        // chiude il dialogo
-        close();
+                // chiude il dialogo
+                close();
+            }
+            else {
+                BinderValidationStatus<Iva> status = binder.validate();
+                Notification.show(status.getValidationErrors()
+                        .stream()
+                        .map(ValidationResult::getErrorMessage)
+                        .collect(Collectors.joining("; ")), 3000, Notification.Position.BOTTOM_START);
+            }
+        } catch (Exception e) {
+            int a = 87;
+        }
     }
 
 }

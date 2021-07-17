@@ -2,7 +2,6 @@ package com.algos.flexo.views.iva;
 
 import com.algos.flexo.*;
 import com.algos.flexo.beans.*;
-import com.algos.flexo.data.*;
 import com.algos.flexo.data.entity.*;
 import com.algos.flexo.data.service.*;
 import com.algos.flexo.service.*;
@@ -106,26 +105,34 @@ public class IvaView extends Div {
         this.add(grid);
         grid.addItemDoubleClickListener(event -> openItem(event));
 
-        provider = providerService.get(Iva.class, ivaService);
-        grid.setDataProvider(provider);
+        // la prima volta recupera la lista originaria da un file csv nella directory 'config'
+        if (ivaService.count() == 0) {
+            ivaService.saveListaConfig();
+        }
+
+        List items = ivaService.findAll();
+        grid.setItems(items);
+//        provider = providerService.get(Iva.class, ivaService);
+//        grid.setDataProvider(provider);
+//        grid.getDataProvider().refreshAll();
     }
 
     private void customizeHeader(HorizontalLayout header) {
 
         header.getStyle().set("flex-direction", "row-reverse");
 
-        Button addButton = new Button("New Index", new Icon(VaadinIcon.PLUS_CIRCLE));
+        Button addButton = new Button("New codice", new Icon(VaadinIcon.PLUS_CIRCLE));
         addButton.getStyle().set("margin-left", "1em");
         addButton.getStyle().set("margin-right", "1em");
         addButton.setIconAfterText(true);
-        //        addButton.addClickListener((ComponentEventListener<ClickEvent<Button>>) buttonClickEvent -> {
-        //            addNewItem();
-        //        });
+        addButton.addClickListener((ComponentEventListener<ClickEvent<Button>>) buttonClickEvent -> {
+            addNewItem();
+        });
 
-        Button expButton = new Button("Export", new Icon(VaadinIcon.ARROW_CIRCLE_DOWN_O));
-        expButton.getStyle().set("margin-left", "1em");
-        expButton.getStyle().set("margin-right", "1em");
-        expButton.setIconAfterText(true);
+        //        Button expButton = new Button("Export", new Icon(VaadinIcon.ARROW_CIRCLE_DOWN_O));
+//        expButton.getStyle().set("margin-left", "1em");
+//        expButton.getStyle().set("margin-right", "1em");
+//        expButton.setIconAfterText(true);
         //        expButton.addClickListener((ComponentEventListener<ClickEvent<Button>>) buttonClickEvent -> {
         //            byte[] barray = marketIndexService.exportExcel(grid.getDataProvider());
         //            if(barray!=null){
@@ -134,7 +141,7 @@ public class IvaView extends Div {
         //            }
         //        });
 
-        header.add(addButton, expButton);
+        header.add(addButton);
 
     }
 
@@ -142,8 +149,16 @@ public class IvaView extends Div {
     /**
      * Present a dialog to update an item
      */
+    private void addNewItem() {
+        context.getBean(IvaDialog.class).open();
+    }
+
+    /**
+     * Present a dialog to update an item
+     */
     private void openItem(ItemDoubleClickEvent<Iva> event) {
         context.getBean(IvaDialog.class, event.getItem()).open();
+        grid.getDataProvider().refreshAll();
     }
 
 }

@@ -47,7 +47,7 @@ public class DataProviderService {
                 // First callback fetches items based on a query
                 fetchCallback -> {
                     // Esistono DUE tipi di Sort: quello di Spring e quello di Vaadin
-                    Sort sortSpring = null;
+                    Sort sortSpring ;
 
                     // The index of the first item to load
                     int offset = fetchCallback.getOffset();
