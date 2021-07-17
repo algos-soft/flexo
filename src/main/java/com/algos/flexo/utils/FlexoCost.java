@@ -19,6 +19,8 @@ public abstract class FlexoCost {
 
     public static final String ENCODE = "UTF-8";
 
+    public static final String GRID_KEY = "id";
+
     public static final String VUOTA = "";
 
     public static final String SPAZIO = " ";

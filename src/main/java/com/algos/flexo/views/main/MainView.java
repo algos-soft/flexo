@@ -1,6 +1,8 @@
 package com.algos.flexo.views.main;
 
+import com.algos.flexo.data.entity.*;
 import com.algos.flexo.views.PageSubtitle;
+import com.algos.flexo.views.invoices.*;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -93,18 +95,9 @@ public class MainView extends AppLayout {
     }
 
     private Component[] createMenuItems() {
-//        return new Tab[]{
-//                createTab("Generators", GeneratorsView.class),
-//                createTab("Simulations", SimulationsView.class),
-//                createTab("Indexes", IndexesView.class),
-//                createTab("Admin", AdminView.class),
-//                createTab("Settings", SettingsView.class),
-//                createTab("Users", UsersView.class),
-//                createTab("About", AboutView.class)};
-
-        return new Tab[]{};
-
-
+        return new Tab[]{
+                createTab("Fatture", InvoicesView.class),
+                createTab("Codici Iva", Iva.class)};
         }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {

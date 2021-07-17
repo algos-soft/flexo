@@ -4,6 +4,7 @@ import com.algos.flexo.*;
 import com.algos.flexo.beans.*;
 import com.algos.flexo.data.entity.*;
 import com.algos.flexo.data.service.*;
+import com.algos.flexo.service.*;
 import com.algos.flexo.views.*;
 import com.algos.flexo.views.main.*;
 import com.vaadin.flow.component.*;
@@ -43,6 +44,14 @@ public class IvaView extends Div {
     @Autowired
     public IvaService ivaService;
 
+    /**
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
+     */
+    @Autowired
+    public ListService listService;
+
     private Grid<Iva> grid;
 
     @Autowired
@@ -74,28 +83,23 @@ public class IvaView extends Div {
     }
 
     private void createGrid() {
-        // flag=true vengono create tutte le colonne in automatico
-        grid = new Grid<>(Iva.class, true);
         //        grid.addColumn("code");
         //        grid.addColumn("description");
         //        grid.addColumn("percent");
         //        grid.addColumn("enDescription");
         //        grid.addColumn("type");
 
-        grid.setHeight("100%");
-        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);
-
+        // flag=true vengono create tutte le colonne in automatico
+        grid = listService.getGrid(Iva.class,false);
 
         // provvisorio per ricreare la lista ogni volta @todo Da levare
         ivaService.deleteAll();
         ivaService.saveListaConfig(); // recupera la lista da un file csv nella directory 'config'
         // provvisorio per ricreare la lista ogni volta @todo Da levare
 
-
         // recupero dal service/repository per adesso senza DataProvider
         List<Iva> items = ivaService.findAll();
         grid.setItems(items);
-
 
         this.add(grid);
         grid.addItemDoubleClickListener(event -> openItem(event));
