@@ -2,6 +2,7 @@ package com.algos.flexo.views.iva;
 
 import com.algos.flexo.*;
 import com.algos.flexo.beans.*;
+import com.algos.flexo.data.*;
 import com.algos.flexo.data.entity.*;
 import com.algos.flexo.data.service.*;
 import com.algos.flexo.service.*;
@@ -52,6 +53,14 @@ public class IvaView extends Div {
     @Autowired
     public ListService listService;
 
+    /**
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
+     */
+    @Autowired
+    public DataProviderService providerService;
+
     private Grid<Iva> grid;
 
     @Autowired
@@ -59,6 +68,8 @@ public class IvaView extends Div {
 
     @Autowired
     private Utils utils;
+
+    private CallbackDataProvider provider;
 
     @PostConstruct
     private void init() {
@@ -90,42 +101,13 @@ public class IvaView extends Div {
         //        grid.addColumn("type");
 
         // flag=true vengono create tutte le colonne in automatico
-        grid = listService.getGrid(Iva.class,false);
-
-        // provvisorio per ricreare la lista ogni volta @todo Da levare
-        ivaService.deleteAll();
-        ivaService.saveListaConfig(); // recupera la lista da un file csv nella directory 'config'
-        // provvisorio per ricreare la lista ogni volta @todo Da levare
-
-        // recupero dal service/repository per adesso senza DataProvider
-        List<Iva> items = ivaService.findAll();
-        grid.setItems(items);
+        grid = listService.getGrid(Iva.class, true);
 
         this.add(grid);
         grid.addItemDoubleClickListener(event -> openItem(event));
 
-        CallbackDataProvider<Iva, Void> provider;
-        //                provider = DataProvider.fromCallbacks(fetchCallback -> {
-        //                    try {
-        //                        int offset = fetchCallback.getOffset();
-        //                        int limit = fetchCallback.getLimit();
-        ////                        order = fetchCallback.getSortOrders();
-        //                        List<Iva> entities = null;
-        //                        return null;
-        //                    } catch (InvalidBigNumException e) {
-        //                        return null;
-        //                    }
-        //                }, countCallback -> {
-        //                    try {
-        //                        int count=2;
-        //                        return count;
-        //                    } catch (InvalidBigNumException e) {
-        //                        return 0;
-        //                    }
-        //                });
-        //
-        //                grid.setDataProvider(provider);
-
+        provider = providerService.get(Iva.class, ivaService);
+        grid.setDataProvider(provider);
     }
 
     private void customizeHeader(HorizontalLayout header) {

@@ -42,7 +42,7 @@ public class ListService {
         grid.setHeight("100%");
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);
 
-        if (!creazioneautomaticaColonne && grid.getColumnByKey(GRID_KEY) != null) {
+        if (creazioneautomaticaColonne && grid.getColumnByKey(GRID_KEY) != null) {
             grid.removeColumnByKey(GRID_KEY);
         }
 

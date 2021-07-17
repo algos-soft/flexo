@@ -1,12 +1,14 @@
 package com.algos.flexo.data.service;
 
+import com.algos.flexo.data.*;
 import com.algos.flexo.data.entity.*;
 import com.algos.flexo.service.*;
 import com.vaadin.flow.spring.annotation.*;
+import org.apache.poi.ss.formula.functions.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
-import org.vaadin.artur.helpers.*;
+import org.springframework.data.domain.*;
 
 import java.util.*;
 
@@ -19,9 +21,7 @@ import java.util.*;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class IvaService {
-
-    private IvaRepository repository;
+public class IvaService extends DataService {
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -30,6 +30,8 @@ public class IvaService {
      */
     @Autowired
     public ResourceService resourceService;
+
+    private IvaRepository repository;
 
     public IvaService(@Autowired IvaRepository repository) {
         this.repository = repository;
@@ -63,10 +65,10 @@ public class IvaService {
      * Provvisorio per testare la Grid <br>
      */
     public void saveListaConfig() {
-        List<Iva> items =getListConfig();
+        List<Iva> items = getListConfig();
 
         if (items != null && items.size() > 0) {
-            for (Iva iva: items) {
+            for (Iva iva : items) {
                 repository.save(iva);
             }
         }
@@ -77,7 +79,8 @@ public class IvaService {
      * Provvisorio per testare la Grid <br>
      */
     public Iva creaIvaFromCsv(String riga) {
-        Iva iva = new Iva();;
+        Iva iva = new Iva();
+        ;
         String code;
         String description;
         String percentText;
@@ -117,16 +120,29 @@ public class IvaService {
         return iva;
     }
 
-    public void save(Iva entityBean) {
-        repository.save(entityBean);
+    @Override
+    public void save(AbstractEntity entityBean) {
+        repository.save((Iva) entityBean);
     }
 
+    @Override
     public void deleteAll() {
         repository.deleteAll();
     }
 
-    public List findAll() {
+    @Override
+    public List<Iva> findAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public List fetch(Class<? extends AbstractEntity> entityClazz, Sort sortSpring, int offset, int limit) {
+        return repository.findAll(); // provvisorio
+    }
+
+    @Override
+    public int count(Class entityClazz) {
+        return ((Long) repository.count()).intValue();
     }
 
 }

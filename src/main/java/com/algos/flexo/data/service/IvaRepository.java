@@ -14,4 +14,9 @@ import org.springframework.data.jpa.repository.*;
  * Time: 11:20
  */
 public interface IvaRepository extends JpaRepository<Iva, Integer> {
+
+
+//    @Query("SELECT COUNT(s) FROM Simulation s WHERE s.generator=:generator")
+//    int count();
+
 }

@@ -89,44 +89,32 @@ public class IvaDialog extends Dialog {
         codeField.setPlaceholder("code");
         codeField.setRequired(true);
         codeField.setErrorMessage("code must be filled in!");
-        if (entityBean.getCode() != null) {
-            codeField.setValue(entityBean.getCode());
-        }
 
         descriptionField = new TextField();
         descriptionField.setLabel("Description");
         descriptionField.setPlaceholder("description");
         descriptionField.setRequired(true);
         descriptionField.setErrorMessage("description must be filled in!");
-        if (entityBean.getDescription() != null) {
-            descriptionField.setValue(entityBean.getDescription());
-        }
 
         percentField = new NumberField();
         percentField.setLabel("Aliquota %");
         percentField.setPlaceholder("aliquota %");
         percentField.setErrorMessage("aliquota must be filled in!");
-        if (entityBean.getPercent() != null) {
-            percentField.setValue(entityBean.getPercent().doubleValue());
-        }
 
         enDescriptionField = new TextField();
         enDescriptionField.setLabel("English description");
         enDescriptionField.setPlaceholder("optional");
-        if (entityBean.getEnDescription() != null) {
-            enDescriptionField.setValue(entityBean.getEnDescription());
-        }
 
         typeField = new TextField();
         typeField.setLabel("Type");
         typeField.setPlaceholder("optional");
-        if (entityBean.getType() != null) {
-            typeField.setValue(entityBean.getType());
-        }
+
+        fromDataBaseToUI();
 
         body.add(codeField, descriptionField, percentField, enDescriptionField, typeField);
         return body;
     }
+
 
     private Component buildFooter() {
         Div btnLayout = new Div();
@@ -140,6 +128,39 @@ public class IvaDialog extends Dialog {
         btnLayout.add(cancelButton, confirmButton);
 
         return btnLayout;
+    }
+
+    // trasferisce i valori dal database al binder
+    private void fromDataBaseToUI() {
+        if (entityBean.getCode() != null) {
+            if (codeField != null) {
+                codeField.setValue(entityBean.getCode());
+            }
+        }
+
+        if (entityBean.getDescription() != null) {
+            if (descriptionField != null) {
+                descriptionField.setValue(entityBean.getDescription());
+            }
+        }
+
+        if (entityBean.getPercent() != null) {
+            if (percentField != null) {
+                percentField.setValue(entityBean.getPercent().doubleValue());
+            }
+        }
+
+        if (entityBean.getEnDescription() != null) {
+            if (enDescriptionField != null) {
+                enDescriptionField.setValue(entityBean.getEnDescription());
+            }
+        }
+
+        if (entityBean.getType() != null) {
+            if (typeField != null) {
+                typeField.setValue(entityBean.getType());
+            }
+        }
     }
 
     private void confirm() {

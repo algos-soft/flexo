@@ -3,6 +3,7 @@ package com.algos.flexo.views.main;
 import com.algos.flexo.data.entity.*;
 import com.algos.flexo.views.PageSubtitle;
 import com.algos.flexo.views.invoices.*;
+import com.algos.flexo.views.iva.*;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -97,8 +98,8 @@ public class MainView extends AppLayout {
     private Component[] createMenuItems() {
         return new Tab[]{
                 createTab("Fatture", InvoicesView.class),
-                createTab("Codici Iva", Iva.class)};
-        }
+                createTab("Codici Iva", IvaView.class)};
+    }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
         final Tab tab = new Tab();
