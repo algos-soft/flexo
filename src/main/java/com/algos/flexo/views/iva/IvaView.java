@@ -119,7 +119,7 @@ public class IvaView extends Div {
 
     private void customizeHeader(HorizontalLayout header) {
 
-        header.getStyle().set("flex-direction", "row-reverse");
+        header.getStyle().set("flex-direction", "row");
 
         Button addButton = new Button("New codice", new Icon(VaadinIcon.PLUS_CIRCLE));
         addButton.getStyle().set("margin-left", "1em");
@@ -128,18 +128,6 @@ public class IvaView extends Div {
         addButton.addClickListener((ComponentEventListener<ClickEvent<Button>>) buttonClickEvent -> {
             addNewItem();
         });
-
-        //        Button expButton = new Button("Export", new Icon(VaadinIcon.ARROW_CIRCLE_DOWN_O));
-//        expButton.getStyle().set("margin-left", "1em");
-//        expButton.getStyle().set("margin-right", "1em");
-//        expButton.setIconAfterText(true);
-        //        expButton.addClickListener((ComponentEventListener<ClickEvent<Button>>) buttonClickEvent -> {
-        //            byte[] barray = marketIndexService.exportExcel(grid.getDataProvider());
-        //            if(barray!=null){
-        //                excelInputStream = new ByteArrayInputStream(barray);
-        //                anchorButton.clickInClient();
-        //            }
-        //        });
 
         header.add(addButton);
 

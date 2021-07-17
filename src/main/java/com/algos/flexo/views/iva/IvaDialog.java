@@ -2,6 +2,8 @@ package com.algos.flexo.views.iva;
 
 import com.algos.flexo.data.entity.*;
 import com.algos.flexo.data.service.*;
+import com.algos.flexo.fields.*;
+import static com.algos.flexo.utils.FlexoCost.*;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.combobox.*;
@@ -12,12 +14,18 @@ import com.vaadin.flow.component.notification.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.data.binder.*;
+import com.vaadin.flow.function.*;
 import com.vaadin.flow.spring.annotation.*;
+import org.apache.poi.ss.formula.functions.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
+import org.springframework.context.*;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.convert.converter.*;
 
 import javax.annotation.*;
+import java.util.*;
+import java.util.function.*;
 import java.util.stream.*;
 
 /**
@@ -30,6 +38,14 @@ import java.util.stream.*;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class IvaDialog extends Dialog {
+
+    /**
+     * Istanza di una interfaccia SpringBoot <br>
+     * Iniettata automaticamente dal framework SpringBoot con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
+     */
+    @Autowired
+    public ApplicationContext appContext;
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -57,7 +73,7 @@ public class IvaDialog extends Dialog {
     private TextArea enDescriptionField;
 
     // se non c'è corrispondenza occorre un converter per il binder
-    private ComboBox typeField;
+    private ComboField<String> typeField;
 
     private Binder<Iva> binder;
 
@@ -95,9 +111,10 @@ public class IvaDialog extends Dialog {
 
     private Component buildHeader() {
         Div header = new Div();
+        String nuovo = entityBean.getId() != null ? VUOTA : " - New";
 
         header.addClassName("header");
-        Span span = new Span("Codice Iva");
+        Span span = new Span(String.format("Codice Iva%s", nuovo));
         span.getStyle().set("marginLeft", "15px");
         span.getStyle().set("font-weight", "bold");
         span.getStyle().set("color", "green");
@@ -142,11 +159,10 @@ public class IvaDialog extends Dialog {
         enDescriptionField.setWidth(lar2);
         enDescriptionField.setPlaceholder("optional");
 
-        typeField = new ComboBox();
-        typeField.setItems(ivaService.getTypes());
+        List items= ivaService.getTypes();
+        typeField = appContext.getBean(ComboField.class,items);
         typeField.setLabel("Type");
         typeField.setWidth(lar2);
-        typeField.setPlaceholder("optional");
 
         primaRiga.add(codeField, percentField);
         secondaRiga.add(descriptionField);
@@ -191,12 +207,16 @@ public class IvaDialog extends Dialog {
                 .bind(Iva::getPercent, Iva::setPercent);
 
         binder.forField(codeField)
-                .withValidator(text -> text.length() > 0, "Not null")
+                .withValidator(text -> text.length() > 0, "Code must not be null")
+                .withValidator(text -> text.length() <= 3, "Code max is 3")
                 .bind(Iva::getCode, Iva::setCode);
 
         binder.forField(descriptionField)
-                .withValidator(text -> text.length() > 0, "Not null")
+                .withValidator(text -> text.length() > 0, "Description must not be null")
+                .withValidator(text -> text.length() > 4, "Description must be 4 at least")
                 .bind(Iva::getDescription, Iva::setDescription);
+
+        binder.forField(typeField).bind(Iva::getType,Iva::setType);
 
         // Updates the value in each bound field component
         //--Sincronizza il binder all' apertura della scheda

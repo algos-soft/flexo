@@ -59,13 +59,12 @@ public class Iva extends AbstractEntity {
         this.enDescription = enDescription;
     }
 
-    public String getType() {
+    public  String getType() {
         return type;
     }
 
     public void setType(String type) {
         this.type = type;
     }
-
 
 }
