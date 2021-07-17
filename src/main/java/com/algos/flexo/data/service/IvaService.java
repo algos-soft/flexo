@@ -120,6 +120,10 @@ public class IvaService extends DataService {
         return iva;
     }
 
+    public List<String> getTypes() {
+        return resourceService.readListConfig("iva-type");
+    }
+
     @Override
     public void save(AbstractEntity entityBean) {
         repository.save((Iva) entityBean);

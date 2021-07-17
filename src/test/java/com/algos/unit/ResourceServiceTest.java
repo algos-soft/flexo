@@ -100,7 +100,7 @@ public class ResourceServiceTest {
         System.out.println(String.format("Nella directory '%s' esiste il file: %s", CONFIG, sorgente));
         System.out.println(String.format("Il file '%s' è composto di %s righe", sorgente, ottenutoArray.size()));
 
-        sorgente = "iva-codici";
+        sorgente = "iva-type";
         ottenutoArray = service.readListConfig(sorgente);
         assertNotNull(ottenuto);
         System.out.println(VUOTA);

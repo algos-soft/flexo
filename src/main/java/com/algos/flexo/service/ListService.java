@@ -3,9 +3,12 @@ package com.algos.flexo.service;
 import com.algos.flexo.data.*;
 import static com.algos.flexo.utils.FlexoCost.*;
 import com.vaadin.flow.component.grid.*;
+import org.apache.poi.ss.formula.functions.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.*;
+
+import java.util.*;
 
 /**
  * Project flexo
@@ -44,6 +47,12 @@ public class ListService {
 
         if (creazioneautomaticaColonne && grid.getColumnByKey(GRID_KEY) != null) {
             grid.removeColumnByKey(GRID_KEY);
+        }
+
+        List<Grid.Column> lista = grid.getColumns();
+        for (Grid.Column column : lista) {
+            column.setSortable(true);
+            column.setAutoWidth(true);
         }
 
         return grid;

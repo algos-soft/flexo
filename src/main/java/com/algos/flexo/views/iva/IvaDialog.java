@@ -4,6 +4,7 @@ import com.algos.flexo.data.entity.*;
 import com.algos.flexo.data.service.*;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.*;
+import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.component.dialog.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
@@ -38,13 +39,13 @@ public class IvaDialog extends Dialog {
 
     private TextField codeField;
 
-    private TextField descriptionField;
+    private TextArea descriptionField;
 
     private NumberField percentField;
 
-    private TextField enDescriptionField;
+    private TextArea enDescriptionField;
 
-    private TextField typeField;
+    private ComboBox typeField;
 
     public IvaDialog() {
     }
@@ -75,14 +76,25 @@ public class IvaDialog extends Dialog {
 
     private Component buildHeader() {
         Div header = new Div();
-        header.addClassName("header");
 
+        header.addClassName("header");
+        Span span = new Span("Codice Iva");
+        span.getStyle().set("marginLeft", "15px");
+        span.getStyle().set("font-weight", "bold");
+        span.getStyle().set("color", "green");
+
+        header.add(span);
         return header;
     }
 
     private Component buildBody() {
         VerticalLayout body = new VerticalLayout();
         body.addClassName("body");
+        String lar = "30em";
+
+        HorizontalLayout primaRiga = new HorizontalLayout();
+        HorizontalLayout secondaRiga = new HorizontalLayout();
+        HorizontalLayout terzaRiga = new HorizontalLayout();
 
         codeField = new TextField();
         codeField.setLabel("Code");
@@ -90,8 +102,9 @@ public class IvaDialog extends Dialog {
         codeField.setRequired(true);
         codeField.setErrorMessage("code must be filled in!");
 
-        descriptionField = new TextField();
+        descriptionField = new TextArea();
         descriptionField.setLabel("Description");
+        descriptionField.setWidth(lar);
         descriptionField.setPlaceholder("description");
         descriptionField.setRequired(true);
         descriptionField.setErrorMessage("description must be filled in!");
@@ -101,23 +114,31 @@ public class IvaDialog extends Dialog {
         percentField.setPlaceholder("aliquota %");
         percentField.setErrorMessage("aliquota must be filled in!");
 
-        enDescriptionField = new TextField();
+        enDescriptionField = new TextArea();
         enDescriptionField.setLabel("English description");
         enDescriptionField.setPlaceholder("optional");
 
-        typeField = new TextField();
+        typeField = new ComboBox();
+        typeField.setItems(ivaService.getTypes());
         typeField.setLabel("Type");
+        typeField.setWidth(lar);
         typeField.setPlaceholder("optional");
 
         fromDataBaseToUI();
 
-        body.add(codeField, descriptionField, percentField, enDescriptionField, typeField);
+        primaRiga.add(codeField, percentField);
+        secondaRiga.add(descriptionField);
+        terzaRiga.add(typeField);
+        body.add(primaRiga, secondaRiga, terzaRiga);
         return body;
     }
 
 
     private Component buildFooter() {
-        Div btnLayout = new Div();
+        HorizontalLayout btnLayout = new HorizontalLayout();
+        btnLayout.setSpacing(true);
+        btnLayout.setMargin(true);
+
         btnLayout.addClassName("footer");
 
         Button confirmButton = new Button("Confirm", event -> { confirm(); });
