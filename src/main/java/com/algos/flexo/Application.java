@@ -4,7 +4,6 @@ import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.boot.web.servlet.support.*;
 import org.springframework.scheduling.annotation.*;
-import org.vaadin.artur.helpers.*;
 
 import javax.annotation.*;
 
